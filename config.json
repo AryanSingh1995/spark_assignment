@@ -1,0 +1,80 @@
+{
+    "datasets": {
+      "orders": {
+        "path": "Dataset/orderdetails.csv",
+        "format": "csv",
+        "schema": {
+          "OrderID": "integer",
+          "CustomerID": "string",
+          "OrderDate": "date"
+        }
+      },
+      "order_items": {
+        "path": "Dataset/orderitemdetails.csv",
+        "format": "csv",
+        "schema": {
+          "OrderID": "integer",
+          "ProductID": "string",
+          "Quantity": "integer",
+          "UnitPrice": "double"
+        }
+      },
+      "accounts": {
+        "path": "Dataset/accounts.csv",
+        "format": "csv",
+        "schema": {
+          "AccountNumber": "string",
+          "AccountType": "string",
+          "Balance": "double"
+        }
+      },
+      "transactions": {
+        "path": "Dataset/transactions.csv",
+        "format": "csv",
+        "schema": {
+          "TransactionID": "string",
+          "AccountNumber": "string",
+          "Amount": "double",
+          "TransactionType": "string",
+          "Date": "date"
+        }
+      }
+    },
+    "analyses": [
+      {
+        "name": "user_distribution",
+        "dataset": "accounts",
+        "group_by": "AccountType",
+        "aggregations": [
+          {"function": "count", "column": "*"}
+        ]
+      },
+      {
+        "name": "most_bought_products",
+        "dataset": "order_items",
+        "group_by": "ProductID",
+        "aggregations": [
+          {"function": "count", "column": "*"}
+        ],
+        "order_by": {"column": "count(1)", "order": "desc"},
+        "limit": 10
+      },
+      {
+        "name": "item_quantity_distribution",
+        "dataset": "order_items",
+        "group_by": "Quantity",
+        "aggregations": [
+          {"function": "count", "column": "*"}
+        ]
+      },
+      {
+        "name": "monthly_transactions",
+        "dataset": "transactions",
+        "group_by": "month(Date)",
+        "aggregations": [
+          {"function": "count", "column": "*"}
+        ]
+      }
+    ]
+  }
+  
